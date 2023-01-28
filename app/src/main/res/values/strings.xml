@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">BeatFollower</string>
+    <!--
+    This strings are used for square devices and overridden by strings in
+    values-round/strings.xml for round devices.
+    -->
+</resources>
