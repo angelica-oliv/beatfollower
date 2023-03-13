@@ -16,16 +16,18 @@ class MainViewModel @Inject constructor(
     val heartState = healthRepository.getLatestHeartRate()
 
     override fun onCleared() {
-        viewModelScope.launch {
-            if (healthServicesManager.hasHeartRateCapability()) {
-                healthServicesManager.unregisterForHeartRateData()
-            }
-        }
+        unRegisterHeartRate()
     }
 
     fun onBodySensorPermissionGranted() {
-        // Check that the device has the heart rate capability and progress to the next state
-        // accordingly.
+        registerHeartRate()
+    }
+
+    fun onBodySensorPermissionRevoked() {
+        unRegisterHeartRate()
+    }
+
+    private fun registerHeartRate() {
         viewModelScope.launch {
             if (healthServicesManager.hasHeartRateCapability()) {
                 healthServicesManager.registerForHeartRateData()
@@ -33,7 +35,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun onBodySensorPermissionRevoked() {
+    private fun unRegisterHeartRate() {
         viewModelScope.launch {
             if (healthServicesManager.hasHeartRateCapability()) {
                 healthServicesManager.unregisterForHeartRateData()
