@@ -45,10 +45,6 @@ fun HeartBitComponent() {
     val mainViewModel: MainViewModel = hiltViewModel()
     val heartRate by mainViewModel.heartState.collectAsState(0.0)
     BeatFollowerTheme {
-        /* If you have enough items in your list, use [ScalingLazyColumn] which is an optimized
-         * version of LazyColumn for wear devices with some added features. For more information,
-         * see d.android.com/wear/compose.
-         */
         Column(
             modifier = Modifier
                 .fillMaxSize()
