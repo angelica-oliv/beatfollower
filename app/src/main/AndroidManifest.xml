@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <!-- For receiving heart rate data. -->
     <uses-permission android:name="android.permission.BODY_SENSORS" />
+    <!-- For re-register on boot -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <application
         android:name="com.angelicao.beatfollower.BeatFollowerApplication"
         android:allowBackup="true"
@@ -33,9 +35,13 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".domain.PassiveDataService"
-            android:permission="com.google.android.wearable.healthservices.permission.PASSIVE_DATA_BINDING"
-            android:exported="true" />
+        <receiver
+            android:name=".domain.StartupReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

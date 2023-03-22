@@ -15,10 +15,6 @@ class MainViewModel @Inject constructor(
 ): ViewModel() {
     val heartState = healthRepository.getLatestHeartRate()
 
-    override fun onCleared() {
-        unRegisterHeartRate()
-    }
-
     fun onBodySensorPermissionGranted() {
         registerHeartRate()
     }

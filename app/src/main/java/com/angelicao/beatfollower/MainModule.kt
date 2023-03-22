@@ -6,8 +6,11 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.health.services.client.HealthServices
 import androidx.health.services.client.HealthServicesClient
+import androidx.health.services.client.data.DataType
+import androidx.health.services.client.data.PassiveListenerConfig
 import com.angelicao.beatfollower.data.HealthRepositoryApi
 import com.angelicao.beatfollower.data.HealthRepositoryImpl
+import com.angelicao.beatfollower.domain.HealthListenerCallback
 import com.angelicao.beatfollower.domain.HealthServicesManagerApi
 import com.angelicao.beatfollower.domain.HealthServicesManagerImpl
 import dagger.Binds
@@ -44,6 +47,16 @@ class ApplicationModule {
     fun provideIODispatcher(): CoroutineDispatcher {
         return Dispatchers.IO
     }
+
+    @Singleton
+    @Provides
+    fun providePassiveListenerConfig() = PassiveListenerConfig.builder()
+        .setDataTypes(setOf(DataType.HEART_RATE_BPM))
+        .build()
+
+    @Singleton
+    @Provides
+    fun provideHealthListenerCallback(repository: HealthRepositoryApi) = HealthListenerCallback(repository)
 }
 
 @Module

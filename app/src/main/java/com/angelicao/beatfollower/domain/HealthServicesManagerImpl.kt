@@ -9,30 +9,26 @@ import com.angelicao.beatfollower.TAG
 import javax.inject.Inject
 
 class HealthServicesManagerImpl @Inject constructor(
-    healthServicesClient: HealthServicesClient
+    healthServicesClient: HealthServicesClient,
+    private val passiveListenerConfig: PassiveListenerConfig,
+    private val passiveListenerCallback: HealthListenerCallback
 ) : HealthServicesManagerApi {
     private val passiveMonitoringClient = healthServicesClient.passiveMonitoringClient
-    private val dataTypes = setOf(DataType.HEART_RATE_BPM)
-
     override suspend fun hasHeartRateCapability(): Boolean {
         val capabilities = passiveMonitoringClient.getCapabilitiesAsync().await()
         return (DataType.HEART_RATE_BPM in capabilities.supportedDataTypesPassiveMonitoring)
     }
 
     override suspend fun registerForHeartRateData() {
-        val passiveListenerConfig = PassiveListenerConfig.builder()
-            .setDataTypes(dataTypes)
-            .build()
-
         Log.i(TAG, "Registering listener")
-        passiveMonitoringClient.setPassiveListenerServiceAsync(
-            PassiveDataService::class.java,
-            passiveListenerConfig
-        ).await()
+        passiveMonitoringClient.setPassiveListenerCallback(
+            passiveListenerConfig,
+            passiveListenerCallback
+        )
     }
 
     override suspend fun unregisterForHeartRateData() {
         Log.i(TAG, "Unregistering listeners")
-        passiveMonitoringClient.clearPassiveListenerServiceAsync().await()
+        passiveMonitoringClient.clearPassiveListenerCallbackAsync().await()
     }
 }
