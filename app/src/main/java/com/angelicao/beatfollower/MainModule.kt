@@ -37,13 +37,6 @@ class ApplicationModule {
     fun provideDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
         return context.dataStore
     }
-
-    @Singleton
-    @Provides
-    @Named("IODispatcher")
-    fun provideIODispatcher(): CoroutineDispatcher {
-        return Dispatchers.IO
-    }
 }
 
 @Module
